@@ -52,20 +52,36 @@ class _PriceScreenState extends State<PriceScreen> {
     );
   }
 
-  String value = '?';
+  Map cryptoValues = {};
 
   //TODO 7: Figure out a way of displaying a '?' on screen while we're waiting for the price data to come back. Hint: You'll need a ternary operator.
 
-  //TODO 6: Update this method to receive a Map containing the crypto:price key value pairs. Then use that map to update the CryptoCards.
   void getData() async {
     try {
-      double data = await CoinData().getCoinData(selectedCurrency);
+      var data =
+          await CoinData().getCoinDataForAllCryptoCurrencies(selectedCurrency);
       setState(() {
-        value = data.toStringAsFixed(0);
+        cryptoValues = data;
       });
     } catch (e) {
+      print('There was an exception:');
       print(e);
     }
+  }
+
+  List cryptoValueCards() {
+    getData();
+    List cryptoCards = [];
+    for (String cryptoCur in cryptoList) {
+      cryptoCards.add(
+        CryptoCard(
+          cryptoCurrency: cryptoCur,
+          value: cryptoValues[cryptoCur],
+          selectedCurrency: selectedCurrency,
+        ),
+      );
+    }
+    return cryptoCards;
   }
 
   @override
@@ -73,8 +89,6 @@ class _PriceScreenState extends State<PriceScreen> {
     super.initState();
     getData();
   }
-
-  //TODO: For bonus points, create a method that loops through the cryptoList and generates a CryptoCard for each.
 
   @override
   Widget build(BuildContext context) {
@@ -86,22 +100,7 @@ class _PriceScreenState extends State<PriceScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          //TODO 2: You'll need to able to pass the selectedCurrency, value and cryptoCurrency to the constructor of this CryptoCard Widget.
-          //TODO 3: You'll need to use a Column Widget to contain the three CryptoCards.
-          Padding(
-            padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
-            child: Card(
-              color: Colors.lightBlueAccent,
-              elevation: 5.0,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: CryptoCard(
-                  cryptoCurrency: 'BTC',
-                  value: value,
-                  selectedCurrency: selectedCurrency),
-            ),
-          ),
+          for (Widget card in cryptoValueCards()) card,
           Container(
             height: 150.0,
             alignment: Alignment.center,
@@ -125,13 +124,23 @@ class CryptoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
-      child: Text(
-        '1 $cryptoCurrency = $value $selectedCurrency',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 20.0,
-          color: Colors.white,
+      padding: EdgeInsets.fromLTRB(18.0, 18.0, 18.0, 0),
+      child: Card(
+        color: Colors.lightBlueAccent,
+        elevation: 5.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
+          child: Text(
+            '1 $cryptoCurrency = $value $selectedCurrency',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20.0,
+              color: Colors.white,
+            ),
+          ),
         ),
       ),
     );
