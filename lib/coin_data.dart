@@ -40,7 +40,6 @@ class CoinData {
     for (String cryptoCurrency in cryptoList) {
       String requestURL = '$bitcoinAverageURL/$cryptoCurrency$selectedCurrency';
       http.Response response = await http.get(requestURL);
-      print(response);
       if (response.statusCode == 200) {
         var decodedData = jsonDecode(response.body);
         double lastPrice = decodedData['last'];

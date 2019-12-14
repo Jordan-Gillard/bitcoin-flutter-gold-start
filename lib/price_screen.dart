@@ -54,9 +54,6 @@ class _PriceScreenState extends State<PriceScreen> {
 
   Map cryptoValues = {};
   bool isWaiting = false;
-
-  //TODO 7: Figure out a way of displaying a '?' on screen while we're waiting for the price data to come back. Hint: You'll need a ternary operator.
-
   void getData() async {
     isWaiting = true;
     try {
