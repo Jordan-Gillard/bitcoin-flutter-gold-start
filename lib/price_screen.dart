@@ -101,6 +101,7 @@ class _PriceScreenState extends State<PriceScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           for (Widget card in cryptoValueCards()) card,
+          Expanded(child: Container()),
           Container(
             height: 150.0,
             alignment: Alignment.center,
