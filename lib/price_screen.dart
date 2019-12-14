@@ -86,7 +86,6 @@ class _PriceScreenState extends State<PriceScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          //TODO 1: Refactor this Padding Widget into a separate Stateless Widget called CryptoCard, so we can create 3 of them, one for each cryptocurrency.
           //TODO 2: You'll need to able to pass the selectedCurrency, value and cryptoCurrency to the constructor of this CryptoCard Widget.
           //TODO 3: You'll need to use a Column Widget to contain the three CryptoCards.
           Padding(
@@ -97,17 +96,10 @@ class _PriceScreenState extends State<PriceScreen> {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
-                child: Text(
-                  '1 BTC = $value $selectedCurrency',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.0,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
+              child: CryptoCard(
+                  cryptoCurrency: 'BTC',
+                  value: value,
+                  selectedCurrency: selectedCurrency),
             ),
           ),
           Container(
@@ -118,6 +110,29 @@ class _PriceScreenState extends State<PriceScreen> {
             child: Platform.isIOS ? iOSPicker() : androidDropdown(),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CryptoCard extends StatelessWidget {
+  final String cryptoCurrency;
+  final String value;
+  final String selectedCurrency;
+
+  CryptoCard({this.cryptoCurrency, this.value, this.selectedCurrency});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
+      child: Text(
+        '1 $cryptoCurrency = $value $selectedCurrency',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 20.0,
+          color: Colors.white,
+        ),
       ),
     );
   }
